@@ -372,6 +372,7 @@ Listen 443
 </VirtualHost>
 ```
 </div>
+اگر در وضعیت Development هستیم و `www` کار نمیکند کاملا یک چیز طبیعی هست چرا که ما در بستر وب واقعی نیستیم و تنها داریم یک `local host` رو نزدیک میکنیم به یک وضعیت واقعی
 
 ### چگونه برای آپاچی LOG ایجاد کنیم
 اگر بخواهیم بگوییم یکی از بخش های مهم آپاچی درک کردن LOG هست
@@ -501,4 +502,44 @@ User Ip : Ip_address
 </VirtualHost>
 ```
 </div>
+
+## چگونه یک صفحه ErrorDocument ایجاد کنیم
+
+یکی از مشهورترین صفحات ارور در وب سایت ها صفحه 404 یا همون `not found` هست اما اگر دلمون بخواد به جای اون اروری که خود آپاچی برای همه نوع ارورها نمایش میده یک چیز متفاوت باشه باید چیکار کنیم؟
+
+برای اینکار نیازمند استفاده از `ErrorDocument` هستیم که آدرس داکیومنت مورد نظر رو به این دستور میدیم و میگیم مثلا هر وقت این ارور با این شماره ایجاد شد این داکیوممنت رو ظاهر کن
+
+برای اینکار کافی هست از دستور زیر استفاده کنیم
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    ErrorDocument <ErrorNumber> /path_to/ErrorDocument
+</VirtualHost>
+```
+</div>
+
+به طور مثال میخوام این داکیومنت هر وقتی که ارور 404 ظاهر شد نمایان بشه
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    DocumentRoot /mnt/d/server/www/mixpanel/
+    ServerName mixpanel.dev
+    ServerAlias www.mixpanel.dev
+
+    ErrorDocument 404 https://mixpanel.dev/error/404/
+
+    LogFormat "LocalIP: %A Time: %t" common
+    customLog /etc/apache2/custom common
+    ErrorLogFormat "Error Message: \t %M  \n localIp: %A"
+    ErrorLog /etc/apache2/error
+</VirtualHost>
+```
+</div>
+ به این شکل اگر فردی وارد دایرکتوری اشتباه بشه و این دایرکتوری وجود نداشته باشه به اون به شکلی کاملا متفاوت و خلاقانه اروری نمایش داده میشود
+
+ برای ارورهای دیگکه هم میتونیم به طور کامل این شکل رو بسازیم و فقط کافی هست که آدرس و شماره ارور رو داشته باشیم
 </div>
