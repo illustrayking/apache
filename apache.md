@@ -373,4 +373,132 @@ Listen 443
 ```
 </div>
 
+### چگونه برای آپاچی LOG ایجاد کنیم
+اگر بخواهیم بگوییم یکی از بخش های مهم آپاچی درک کردن LOG هست
+
+ما میتونیم توی آپاچی تمام فعالیت هایی که درون وب سایت ما رخ میده رو ضبط و ثبت کنیم 
+
+لاگ به فایلی میگویند که درون اون اطلاعاتی از فعالیت های یوزر ثبت شده مثل آی پی فرد و یا اینکه آیا موفق شده وب سایت رو لود کنه و یا نه
+
+در کل دو مدل لاگ فایل وجود داره
+
+ <div dir="ltr">
+1- Access Log
+
+2- Error Log
+</div>
+لاگ Access به لاگی میگن که اطلالاعاتی جامع در مورد ورود موفقیت آمیز کاربر به وب سایت رو گزاش میدند
+
+2- و مهم ترین لاگ که `Error Log` هست به ما اطلاعاتی جامع در مورد مشکلاتی که کاربرها با وب سایت برخوردن رو میده و یکی از مهمترین بخش های یک آپاچی هست
+
+برای ایجاد یک لاگ فایل دو روش رو داریم یکی `ErrorLog` و دیگری `CustomLog` هست که میتونه کمک کنه به ما در ساخت لاگ های متفاوت
+
+به همین دلیل درون فایل آپاچی خودمون مینویسیم
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    ErrorLog /Path_to/FileName
+</VirtualHost>
+```
+</div>
+این فایل نیازمند هیچ گونه Extension یی نیست
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    DocumentRoot /mnt/d/server/www/mixpanel/
+    ServerName mixpanel.dev
+    ServerAlias www.mixpanel.dev
+    ErrorLog /etc/apache2/errorLog
+</VirtualHost>
+```
+</div>
+
+ما میتونیم حتی یک کار جالب تر رو هم انجام بدیم و اینکه به فایل خودمون فرمت خاصی رو بدیم و بگیم حتی چه چیزهایی وارد بشن و به چه شکل باشن
+
+مثلا من دلم میخواد درون این فایل جلوی هر آی پی که میگیره بنویسه 
+
+User Ip : Ip_address
+
+کافی هست برای اینکار دست به `log formatting` بزنیم
+
+برای اینکار از این روش استفاده میکنیم
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    LogFormat "format_we_want" common name
+</VirtualHost>
+```
+</div>
+برای اینکه بدونیم این فرمت لاگ برای کدوم لاگی نوشته شده از یک اسم در آخر سر استفاده میکنیم و اون رو به لاگ مورد نظر میدهیم به شکل زیر
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    LogFormat "format_we_want" common
+    CustomLog /path_to/File_name common
+</VirtualHost>
+```
+</div>
+انواع مختلفی از فرمت ها رو میتونیم از لینک زیر پیدا کنیم و استفاده کنیم 
+
+[log_format](http://httpd.apache.org/docs/current/mod/mod_log_config.html)
+
+به طور مثال
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    DocumentRoot /mnt/d/server/www/mixpanel/
+    ServerName mixpanel.dev
+    ServerAlias www.mixpanel.dev
+    LogFormat "LocalIP: %A Time: %t" common
+    customLog /etc/apache2/custom common
+</VirtualHost>
+```
+</div>
+
+برای اینکه بتونیم یک `custom log` ایجاد کنیم یعنی اینکه یک لاگی که نیازداریم اطلاعاتی که ما میخواهیم درونش باشه از دستور `CustomLog` به حای `ErrorLog` استفاده میکنیم
+
+و در آخرسر دستور `ErrorLogFormat` دستوری هست که فرمت دهی رو فقط برای `ErrorLog` ایجاد میکنه و تفاوت هاش در این هست که نیازی به اسم نداره و اینکه یک سری دستورات مثل وجود `%M` که وجود پیغام ارورو هست درون اون وجود داره
+
+مثل مثال زیر
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    DocumentRoot /mnt/d/server/www/mixpanel/
+    ServerName mixpanel.dev
+    ServerAlias www.mixpanel.dev
+    LogFormat "LocalIP: %A Time: %t" common
+    customLog /etc/apache2/custom common
+    ErrorLogFormat "Error Message: %M localIp: %A"
+    ErrorLog /etc/apache2/error
+</VirtualHost>
+```
+</div>
+
+و در آخر سر چگونه بین پیغام های لاگ فاصله ایجاد کنیم برای اینکار کافی هست که از دستور `\t` که مخفف tab هست و یا `\n` استفاده کنیم برای اینکه به خط بعد پیغام رو بفرستیم
+
+ <div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    DocumentRoot /mnt/d/server/www/mixpanel/
+    ServerName mixpanel.dev
+    ServerAlias www.mixpanel.dev
+    LogFormat "LocalIP: %A Time: %t" common
+    customLog /etc/apache2/custom common
+    ErrorLogFormat "Error Message: \t %M  \n localIp: %A"
+    ErrorLog /etc/apache2/error
+</VirtualHost>
+```
+</div>
 </div>
