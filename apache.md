@@ -858,6 +858,33 @@ openssl req -new -x509 -days 365 -sha256 -nodes -newkey rsa:4096 -config /path_t
 
 هنگامی که اینتر میکنیم دستور مورد نظر اطلاعاتی رو در مورد Authority از ما میخواد 
 
+دستوراتی همچون آدرس کشور و یا شهر Authority و نام شرکت و خلاصه اطلاعات شخص تا جایی که از شما درخواست ایمیل هم میکنه
+
+به شکل زیر
+
+<div dir="ltr">
+
+```
+Country Name (2 letter code) [AU]:US
+State or Province Name (full name) [Some-State]:New York
+Locality Name (eg, city) []:Brooklyn
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:Example Brooklyn Company
+Organizational Unit Name (eg, section) []:Technology Division
+Common Name (e.g. server FQDN or YOUR name) []:examplebrooklyn.com
+Email Address []:
+```
+</div>
+
+همیشه یادمون باشه که نام domain خودمون رو درون common_name قرار بدیم
+
+به طور مثال 
+
+<div dir="ltr">
+
+```
+Common Name (e.g. server FQDN or YOUR name) []: dev.mixpanel.com
+```
+</div>
 
 <div dir="ltr">
 
