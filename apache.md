@@ -1115,6 +1115,64 @@ Alias /icons/ /etc/apache2/icons/
 ```
 </div>
 
+## چگونه ماژول gzip را برای وب سایت خود فعال کنیم
+
+برای اینکه بتونیم تمام محتوای خودمون رو فشرده کنیم و شرایط واقعی رو بسنجیم کافی هست ابتدا ماژول `deflate` رو فعال کرده و سپس دستور زیر رو بنویسیم
+
+<div dir="ltr">
+
+```
+sudo a2enmod deflate
+```
+</div>
+
+و بعد دستور زیر رو درون `virtualHost` مورد نظر paste میکنیم
+
+<div dir="ltr">
+
+```
+        AddOutputFilterByType DEFLATE "application/atom+xml" \
+                                      "application/javascript" \
+                                      "application/json" \
+                                      "application/ld+json" \
+                                      "application/manifest+json" \
+                                      "application/rdf+xml" \
+                                      "application/rss+xml" \
+                                      "application/schema+json" \
+                                      "application/geo+json" \
+                                      "application/vnd.ms-fontobject" \
+                                      "application/wasm" \
+                                      "application/x-font-ttf" \
+                                      "application/x-javascript" \
+                                      "application/x-web-app-manifest+json" \
+                                      "application/xhtml+xml" \
+                                      "application/xml" \
+                                      "font/eot" \
+                                      "font/opentype" \
+                                      "font/otf" \
+                                      "font/ttf" \
+                                      "image/bmp" \
+                                      "image/svg+xml" \
+                                      "image/vnd.microsoft.icon" \
+                                      "text/cache-manifest" \
+                                      "text/calendar" \
+                                      "text/css" \
+                                      "text/html" \
+                                      "text/javascript" \
+                                      "text/plain" \
+                                      "text/markdown" \
+                                      "text/vcard" \
+                                      "text/vnd.rim.location.xloc" \
+                                      "text/vtt" \
+                                      "text/x-component" \
+                                      "text/x-cross-domain-policy" \
+                                      "text/xml"
+```
+</div>
+
+توسط دستور بالا به سرور میگیم که هر وقتی این فرمت ها رو دیدی تمامشون رو به شیوه gzip فشرده سازی کن و به یوزر انتقال بده
+
+فایل هایی از جمله `text/css, text/html, svg/xml` که میتونه خیلی توی روند سرعت وب سایت تاثیر بزاره
  ## چگونه یک صفحه index بسازیم
  صفحه index به صفحه ای میگن که به جای لود فایل index.html از طریق درگاه https به محتویات یک دایرکتوری دسترسی دارید
 
