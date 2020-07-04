@@ -294,6 +294,54 @@ Protocols h2 http/1.1
 
 اینطوری میتونیم از `HTTP/2.0` لذت ببریم
 
+## چگونه کاری کنیم که سرور فقط با `HTTPS` ران شود
+
+ابتدا ماژول مورد نظر رو ران میکنیم
+
+<div dir="ltr">
+
+```
+sudo a2enmod headers
+```
+</div>
+
+سپس در `virtualHost` خودمون مینویسیم
+
+<div dir="ltr">
+
+```
+Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+```
+</div>
+
+دستور بسیار واضح هست ابتدا به `Header` اطلاعاتی رو میفرستیم 
+
+یعنی اطلاعاتی همچون `always set Strict-Transport-Security` یعنی همیشه از `HSTS` یا همون `HTTPS Strict Mode` استفاده کن و نزار کسی با `HTTP` متصل بشه
+
+اینطوری باز هم امنیت رو افزایش میدیم و اینکه بهش یک زمان بالا مدت میدیم که هیچوقت `request` رو ترک نکنه
+
+و کار بعدی که میکنه این هست که اگر `certificate` به هر دلیلی کار نکنه دیگه دستور `unsafe to dev.mixpanel.com` رو حذف میکنه و اجازه ورود نمیده
+
+و در نهایت `includeSubDomains` که اجازه میده این قوانین رو برای تمامی زیر مجموعه ها هم اعمال کنیم
+
+پس اگر با `curl` اطلاعات `head` رو بگیرم به شما `error` میدهد
+
+به این شکل
+
+<div dir="ltr">
+
+```
+curl -I http://dev.mixpanel.com
+
+HTTP/1.1 400 Bad Request
+Date: Sat, 04 Jul 2020 08:56:39 GMT
+Server: Apache
+Content-Length: 362
+Connection: close
+Content-Type: text/html; charset=iso-8859-1
+```
+</div>
+
 ## چگونه یک  وب سایت را بر روی آپاچی نصب کنیم
 
 قبل از هر چیزی باید بدونیم یکی دیگه از فواید آپاچی این هست که به ما اجازه میده که بتونیم بیش از یک وب سایت رو بر روی یک ip راه اندازی کنیم
