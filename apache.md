@@ -1079,6 +1079,42 @@ sudo apachectl restart
 
 اینطوری هر وقت آدرسی به این شکل برخورد میدونه یعنی کجا باید بره
 
+## دستور Include چیست
+
+در دستور `Include` ما میتونیم به یک کانفیگ فایل یک کانفیگ فایل دیگه attach کنیم
+
+مثال واقعی میزنم
+
+من دو `virtualHost` دارم که هر دو 90 درصد اطلاعاتشون شبیه به هم هست و تنها در جزئیات با هم تفاوت دارند خب برای اینکار میرم یک فایل با فرمت `conf` میسازم و دستورات رو درون اون مینویسم و بعد اون رو به هر `virtualHost` include میکنم
+
+به این شکل
+
+<div dir="ltr">
+
+```
+DocumentRoot /mnt/f/www/
+
+ErrorLog /etc/apache/error
+
+Alias /icons/ /etc/apache2/icons/
+```
+</div>
+
+خب فایل بالا رو من توسط فرمت `conf` ذخیره میکنم و بعد وارد جایی که `virtualHost` های خودم رو نوشتم میشم و مینویسم
+
+<div dir="ltr">
+
+```
+<VirtualHost 192.168.0.50:443>
+    Include /etc/apache2/same.conf
+</VirtualHost>
+
+<VirtualHost 192.168.0.50:575>
+    Include /etc/apache2/same.conf
+</VirtualHost>
+```
+</div>
+
  ## چگونه یک صفحه index بسازیم
  صفحه index به صفحه ای میگن که به جای لود فایل index.html از طریق درگاه https به محتویات یک دایرکتوری دسترسی دارید
 
