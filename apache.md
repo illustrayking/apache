@@ -328,6 +328,10 @@ Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains
 
 به این شکل
 
+![how HSTS warn you in ssl issue](/images/hsts.png)
+
+در تصویر بالا به علت اینکه در وب سایت من مشکل SSL وجود داشت دیگه قابلیت `unsafe to <website>` رو نیورد
+
 <div dir="ltr">
 
 ```
